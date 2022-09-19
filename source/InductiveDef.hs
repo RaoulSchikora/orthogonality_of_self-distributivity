@@ -62,7 +62,7 @@ distrPower ('n':xs) (T t0 t1) s = T t0 t1
 -- helper for unfold. The initial term 'initialT' is not being modified. The funcition recursively calls itself
 -- depending on the position. If the position is an end of a path in the transitive reduct it follows the path up,
 -- if it is a position on a path it recursively calls the funciton again on the left sub term. If the position is 
--- on no path the function calls itself recursively in both sub-terms (left and right).
+-- on no path the function calls itself recursively on both sub-terms (left and right).
 unfolding :: Term -> Term -> Pos -> [(Pos,Pos)] -> Term
 unfolding _ (V v) _ _ = V v
 unfolding initialT (T t0 t1) pos u | isPathEnd pos u = followPathUp [] initialT (T unfoldT0 unfoldT1) pos u
@@ -72,6 +72,8 @@ unfolding initialT (T t0 t1) pos u | isPathEnd pos u = followPathUp [] initialT 
         unfoldT0 = unfolding initialT t0 (pos++[0]) u
         unfoldT1 = unfolding initialT t1 (pos++[1]) u
 
+-- this function is supposed to be called, when we arrive at the end of a path (path are unique as we consider the 
+-- transitve reduct of a tree). The function then works its way up and distributes according to the 'b,l,r,n'-string.
 followPathUp :: String -> Term -> Term -> Pos -> [(Pos,Pos)] -> Term
 followPathUp str initialT newT p u | upperLinks == [] = newT
                                    | otherwise = followPathUp str initialT (T s0 s1) p (delete (head upperLinks) u)
