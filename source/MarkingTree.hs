@@ -1,16 +1,16 @@
 module MarkingTree where
 
-import Multiset
-import OrdInt
-import Rd
-import Data.List
-import Relations
-
 {- This is a module implementing marking trees. A marking tree is a representation of a trek (t,U), 
 where first and second components of the position pairs in U are marked in t, i.e., the trek
         (1.2.3.4, {(\epsilon,0),(\epsilon,00),(0,00)})
 has the marking tree where position \epsilon is doubly marked as first poisiton, 0 is marked as 
 first and second position, and 00 is doubly marked as second position. -}
+
+import Multiset
+import OrdInt
+import Rd
+import Data.List
+import Relations
 
 -- data to mark first and second components of U in a term t for a trek (t,U)
 data Mtree =
@@ -138,65 +138,3 @@ trekToMs (t,u) = ordToMs (cost tree)
 -- returns the norm of a trek, which is a multiset
 norm :: Trek -> Ms
 norm (t,u) = trekToMs (t,u)
-
--- inductively computes a target of a complete development of a trek
-complete :: Trek -> Trek
-complete (t,u) = (unfold t u, [])
-
--- function to 
-unfold :: Term -> [(Pos,Pos)] -> Term
-unfold t u = unfolding t t [] tr
-    where
-        tr = transReduct u
-
-getSubTerm :: Term -> Pos -> Term
-getSubTerm t [] = t
-getSubTerm (T t0 t1) (0:xs) = getSubTerm t0 xs
-getSubTerm (T t0 t1) (1:xs) = getSubTerm t1 xs
-
-isPathEnd :: Pos -> [(Pos,Pos)] -> Bool
-isPathEnd p u = (filter ((==p).snd) u /= []) && (filter ((==p).fst) u == [])
-
-isPathStart :: Pos -> [(Pos,Pos)] -> Bool
-isPathStart p u = filter ((==p).snd) u == [] && (filter ((==p).fst) u /= [])
-
-isOnPath :: Pos -> [(Pos,Pos)] -> Bool
-isOnPath p u = (filter ((==p).snd) u /= []) && (filter ((==p).fst) u /= [])
-
-distr :: Char -> Term -> Term -> Term
-distr _ (V v) s = T (V v) s
-distr 'b' (T t0 t1) s = T (T t0 s) (T t1 s)
-distr 'l' (T t0 t1) s = T (T t0 s) t1
-distr 'r' (T t0 t1) s = T t0 (T t1 s)
-distr 'n' (T t0 t1) s = T t0 t1
-
-distrPower :: String -> Term -> Term -> Term
-distrPower _ (V v) s = T (V v) s
-distrPower [x] t s = distr x t s
-distrPower ('b':xs) (T t0 t1) s = T (distrPower xs t0 s) (distrPower xs t1 s)
-distrPower ('l':xs) (T t0 t1) s = T (distrPower xs t0 s) t1
-distrPower ('r':xs) (T t0 t1) s = T t0 (distrPower xs t1 s)
-distrPower ('n':xs) (T t0 t1) s = T t0 t1
-
-unfolding :: Term -> Term -> Pos -> [(Pos,Pos)] -> Term
-unfolding _ (V v) _ _ = V v
-unfolding initialT (T t0 t1) pos u | isPathEnd pos u = followPathUp [] initialT (T unfoldT0 unfoldT1) pos u
-                                   | isPathStart pos u || isOnPath pos u = unfoldT0
-                                   | otherwise = T unfoldT0 unfoldT1
-    where
-        unfoldT0 = unfolding initialT t0 (pos++[0]) u
-        unfoldT1 = unfolding initialT t1 (pos++[1]) u
-
-followPathUp :: String -> Term -> Term -> Pos -> [(Pos,Pos)] -> Term
-followPathUp str initialT newT p u | upperLinks == [] = newT
-                                   | otherwise = followPathUp str initialT (T s0 s1) p (delete (head upperLinks) u)
-    where
-        upperLinks = sortOn (((length p)-).length.fst) (filter ((==p).snd) u)
-        fstUpperLink = (fst.head) upperLinks
-        leftOfFstUpperLinkEx = or (map (isPrfx (((snd.head) upperLinks)++[0])) (map (snd) (filter ((==fstUpperLink).fst) u)))
-        rightOfFstUpperLinkEx = or (map (isPrfx (((snd.head) upperLinks)++[1])) (map (snd) (filter ((==fstUpperLink).fst) u)))
-        leftAndRightEx = leftOfFstUpperLinkEx && rightOfFstUpperLinkEx
-        ext = if leftAndRightEx then 'n' else (if leftOfFstUpperLinkEx then 'r' else (if rightOfFstUpperLinkEx then 'l' else 'b'))
-        unfoldedSubTerm = unfolding initialT (getSubTerm initialT (fstUpperLink++[1])) (fstUpperLink++[1]) u
-        distrbiuteOverNew = distrPower (str++[ext]) newT unfoldedSubTerm
-        T s0 s1 = followPathUp (str++[ext]) initialT distrbiuteOverNew fstUpperLink u

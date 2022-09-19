@@ -1,5 +1,7 @@
 module Relations where
 
+{- This is a modul implementing relations -}
+
 import qualified Data.Set as Set
 
 -- adds the two relations with Mellies` definiiton of addition
@@ -51,6 +53,7 @@ setClosure set i j | i >= Set.size set = set
         (p1,p2) = Set.elemAt i set
         (q1,q2) = Set.elemAt j set
 
+-- Returns van Oostroms' scopic interior
 scopicInterior :: (Ord a) => [(a,a)] -> [(a,a)] -> [(a,a)]
 scopicInterior us ts = ts `setMinus` (transClosure (ts `setMinus` us))
 
@@ -60,7 +63,7 @@ isTransitive a = setClosure aSet 0 0 == aSet
     where
         aSet = Set.fromList a
 
--- calculates Mellies` bullet function of two relations
+-- calculates Mellies' bullet function of two relations
 bullet :: Ord a => [(a,a)] -> [(a,a)] -> [a] -> [(a,a)]
 bullet xs ys ts = Set.toList (Set.fromList bulletRel) 
     where
@@ -117,6 +120,7 @@ isScopic a n = aSet `Set.isSubsetOf` aBullet
 transReduct :: Ord a => [(a,a)] -> [(a,a)]
 transReduct set = Set.toList (setReduct (Set.fromList set) 0 0)
 
+-- helper for transReduct
 setReduct :: (Eq a, Ord a) => Set.Set((a,a)) -> Int -> Int -> Set.Set((a,a))
 setReduct set i j | i >= Set.size set = set 
                   | j >= Set.size set = setReduct set (i+1) 0

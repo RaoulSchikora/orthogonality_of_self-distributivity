@@ -1,5 +1,7 @@
 module Residuation where
 
+{- This is a modul implementing residuation of self-distributivity. -}
+
 import qualified Data.Set as Set
 
 -- calculates the residual psi `after` phi (i.e. psi/phi) of the two given multisteps 

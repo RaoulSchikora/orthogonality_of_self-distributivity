@@ -4,6 +4,7 @@ import Reader
 import Rd
 import Multiset
 import MarkingTree
+import InductiveDef
 
 ----------------------------------------------------------------------------------------------------
 --                   Test
@@ -14,7 +15,7 @@ tickOrCross :: Bool -> String
 tickOrCross True = "\10003"
 tickOrCross False = "\10007"
 
--- return string representing the sequence of the norm of the given development
+-- returns string representing the sequence of the norm of the given development
 normSequence :: ([Trek],Bool) -> (String,Bool)
 normSequence ([],_) = error "Sequence of norms not supposed to be empty"
 normSequence ((x:[]),b)   | b = (showMs (norm x) ++ "\n   Yeah, the norm decreases! :)",b)
@@ -73,6 +74,7 @@ testFull (t,u) = header ++ "\n" ++ defStr ++ (fst zero) ++ "\n" ++
                 ++ " " ++ tickOrCross (snd (snd one))
                 ++ " " ++ tickOrCross (snd (snd three))
 
+-- short version of testFull
 testShort :: Trek -> String
 testShort (t,u) = header 
     where
@@ -114,7 +116,7 @@ main = do
         result = map (testFull) treks
     putStrLn (id ("----------------------------------------\n " ++ (unwords result)))
 
-
+-- helper for inductiveTest
 testInductivDef :: Trek -> String
 testInductivDef (t,u) = showTrek (t,u) ++ ":\n" ++ unwords tickString ++ "\n\n"
     where
@@ -123,9 +125,10 @@ testInductivDef (t,u) = showTrek (t,u) ++ ":\n" ++ unwords tickString ++ "\n\n"
         correctUnfolds = map (==(fst.fst.last) development) completes
         tickString = map (tickOrCross) correctUnfolds
 
-
-main2 :: IO ()
-main2 = do
+-- tests the function 'complete' by checking if the inductively defined target of a trek
+-- equals the target of a full development
+inductiveTest :: IO ()
+inductiveTest = do
     let t1 = [parse "1.2.3.4.5"]
         t2 = t1 ++ [parse "1.2.3.4.5.6"]
         t3 = t2 ++ [parse "1.2.(3.4.5)"]

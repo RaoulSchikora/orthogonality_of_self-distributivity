@@ -13,7 +13,7 @@ import Data.Char
 
         {- ------------ string to term ------------ -}
 
--- converts a string into tokens neccessary for parsing a term. Since Terms a left associative
+-- converts a string into tokens neccessary for parsing a term. Since Terms are left associative
 -- we need to read the term from right to left. For reason of speed we reverse it once at the 
 -- beginning, which is why the Char ')' becomes the String "(". Similar for '('.
 strToTokens :: String -> [String]
@@ -25,30 +25,37 @@ strToTokens (x:xs) | x == ' ' = strToTokens xs
                      | otherwise = [(getNextVar (x:xs))] ++ 
                         (strToTokens (dropWhile (\x-> not (isParDot [x])) xs))
 
+-- returns True if the given String consists of a single dot, i.e., "."
 isDot :: String -> Bool
 isDot x | x == "."  = True
          | otherwise = False
 
+-- returns True if the given String consists of an opening parentheses, i.e., "("
 isOPar :: String -> Bool 
 isOPar x | x == "("  = True
           | otherwise = False
 
+-- returns True if the given String consists of a closing parentheses, i.e., ")"
 isCPar :: String -> Bool
 isCPar x | x == ")"  = True
           | otherwise = False
 
+-- retruns True if the given String consists of a parentheses
 isPar :: String -> Bool
 isPar x | isOPar x || isCPar x = True
          | otherwise                = False
 
+-- returns True if the given String is a blank character, i.e., " "
 isBlank :: String -> Bool
 isBlank x | x == " "  = True
            | otherwise = False
 
+-- returns True if the given String is a parentheses or a dot, i.e., "." or "(" or ")"
 isParDot :: String -> Bool
 isParDot x | isPar x || isDot x = True
              | otherwise            = False
 
+-- returns True is the given String is a variable
 isVar :: String -> Bool
 isVar x | not (isParDot x) = True
          | otherwise          = False

@@ -1,6 +1,6 @@
 module Multiset where
 
-{- This is a module implementing multiset, interpreted as function over the natrual numbers.
+{- This is a module implementing multisets, interpreted as function over the natrual numbers.
 The show funciton displays the multiset in the more readable form {0,1,1,1,1,2,2,3}, which
 represents the multiset M with M(0)=1, M(1)=4, M(2)=2, M(3)=1. -}
 
@@ -28,20 +28,6 @@ entry num times com | com = "," ++ show num ++ showPower times
 -- converts the power into a string
 showPower :: Int -> String
 showPower n = "^" ++ show n
--- rest discarded, since it takes too long
-{-showPower 1 = "\185"
-showPower 2 = "\178"
-showPower 3 = "\179"
-showPower 4 = "\8308"
-showPower 5 = "\8309"
-showPower 6 = "\8310"
-showPower 7 = "\8311"
-showPower 8 = "\8312"
-showPower 9 = "\8313"
-showPower num = showPower newNum ++ showPower rest
-    where 
-        newNum = num `div` 10
-        rest = num - (newNum*10)-}
 
 -- adds two multisets of arbitrary length
 addMs :: Ms -> Ms -> Ms

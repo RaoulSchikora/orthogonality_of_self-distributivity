@@ -1,13 +1,13 @@
 module Rd where
 
-import Relations
-import qualified Data.Set as Set
-import System.Random
-
 {- This is a module with basic RD operations. RD refers to right self-distributivity, i.e. a rewrite system
 with the single rule
         (x.y).z -> (x.z).(y.z)
 Furthermore RD-multisteps are implemented. -}
+
+import Relations
+import qualified Data.Set as Set
+import System.Random
 
 type Pos = [Int]
 
