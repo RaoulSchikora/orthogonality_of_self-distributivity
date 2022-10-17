@@ -44,13 +44,13 @@ and represents the term `1*2*3*4`.
 
 ### Rd
 
-The module Rd.hs provides basic right self-distributive (RD) operations., e.g.:
+The module Rd.hs provides basic right self-distributive (RD) operations. The most basic RD-operation is
 
 ```
 rd t
 ```
 
-is an RD-operation. Applying the rd-function to the term `t` above results in the term `1*2*4*(3*4)`. With `rdat` we specify at which position we want to apply the RD-operation, e.g.:
+Applying the function `rd` to the term `t` from above results in the term `1*2*4*(3*4)`. With `rdat` we specify at which position we want to apply the RD-operation, e.g.:
 
 ```
 rdat t [0]
@@ -69,5 +69,12 @@ results in the trek `(1*3*(2*3)*4,[([],[0,0]),([],[0,1]),([],[0])])` for the ter
 - 3 reversed in-order strategy: the list is developped according to the greatest in-order step.
 - 4 outer most strategy: the list is developped according to an outer most step.
 
+```
+develop (t,[([],[0]),([],[0,0]),([0],[0,0])]) 3
+```
 
+results in a complete development of the given trek according to the reversed in-order strategy, which is presented by a list of tuples consisting of a trek and the position where the RD step was applied. In the case above the result is `[((1*2*3*4,[([],[0]),([],[0,0]),([0],[0,0])]),[]),((1*2*4*(3*4),[([0],[0,0]),([],[0,0])]),[0]),((1*4*(2*4)*(3*4),[([],[0])]),[]),((1*4*(3*4)*(2*4*(3*4)),[]),[])]`.
 
+### InductiveDef
+
+The module InductiveDef.has are first tries of finding an inductive definition of the target of a complete development of a trek. With the function `complete` the author conjectures an inductive approach. To prove its correctness remain unsuccessful so far.
