@@ -3,7 +3,7 @@ module MarkingTree where
 {- This is a module implementing marking trees. A marking tree is a representation of a trek (t,U), 
 where first and second components of the position pairs in U are marked in t, i.e., the trek
         (1.2.3.4, {(\epsilon,0),(\epsilon,00),(0,00)})
-has the marking tree where position \epsilon is doubly marked as first poisiton, 0 is marked as 
+has the marking tree where position \epsilon is doubly marked as first position, 0 is marked as 
 first and second position, and 00 is doubly marked as second position. -}
 
 import Multiset

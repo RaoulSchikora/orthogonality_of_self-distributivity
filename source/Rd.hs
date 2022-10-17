@@ -37,20 +37,22 @@ data Term =
 instance Show Term where
     show (V v)     = id v
     --show (T t0 t1) = "\8226" ++ show t0 ++ show t1
-    show (T t0 t1) = showLeft t0 ++ "\9667" ++ showRight t1
+    --show (T t0 t1) = showLeft t0 ++ "\9667" ++ showRight t1
+    show (T t0 t1) = showLeft t0 ++ "*" ++ showRight t1
 
 -- show function to omit parentheses on the left (terms associate to the left)
 showLeft :: Term -> String
 showLeft (V v) = id v
-showLeft (T t0 t1) = showLeft t0 ++ "\9667" ++ showRight t1
+showLeft (T t0 t1) = showLeft t0 ++ "*" ++ showRight t1
 
 -- show function to parenthesize on the right of terms
 showRight :: Term -> String
 showRight (V v) = id v
-showRight (T t0 t1) = "(" ++ showLeft t0 ++ "\9667" ++ showRight t1 ++ ")"
+showRight (T t0 t1) = "(" ++ showLeft t0 ++ "*" ++ showRight t1 ++ ")"
 
 type Trek = (Term,[(Pos,Pos)])
 
+-- show function for a trek
 showTrek :: Trek -> String
 showTrek (t,u) = "(" ++ show t ++ "," ++ showPair u ++ ")"
 
