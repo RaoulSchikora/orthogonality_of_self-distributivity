@@ -5,6 +5,7 @@ import Rd
 import Multiset
 import MarkingTree
 import InductiveDef
+import Residuation
 
 ----------------------------------------------------------------------------------------------------
 --                   Test

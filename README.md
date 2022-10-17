@@ -75,6 +75,16 @@ develop (t,[([],[0]),([],[0,0]),([0],[0,0])]) 3
 
 results in a complete development of the given trek according to the reversed in-order strategy, which is presented by a list of tuples consisting of a trek and the position where the RD step was applied. In the case above the result is `[((1*2*3*4,[([],[0]),([],[0,0]),([0],[0,0])]),[]),((1*2*4*(3*4),[([0],[0,0]),([],[0,0])]),[0]),((1*4*(2*4)*(3*4),[([],[0])]),[]),((1*4*(3*4)*(2*4*(3*4)),[]),[])]`.
 
+### Residuation
+
+The module Residuation.hs provides operations with respect to the residual system of self-distributivity. E.g. for `u = [([],[0])]` and `v = [([0],[0,0])]` the function `after` returns the residual of `u` after `v`:
+
+```
+u `after` v
+```
+
+results in `[([],[0]),([],[0,0])]`. The function `join` returns the join of `u` and `v`.
+
 ### InductiveDef
 
 The module InductiveDef.hs represents first tries of finding an inductive definition of the target of a complete development of a trek. With the function `complete` the author conjectures an inductive approach. However, attempts to prove its correctness remain unsuccessful so far.
