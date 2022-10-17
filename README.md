@@ -77,4 +77,4 @@ results in a complete development of the given trek according to the reversed in
 
 ### InductiveDef
 
-The module InductiveDef.has are first tries of finding an inductive definition of the target of a complete development of a trek. With the function `complete` the author conjectures an inductive approach. To prove its correctness remain unsuccessful so far.
+The module InductiveDef.hs represents first tries of finding an inductive definition of the target of a complete development of a trek. With the function `complete` the author conjectures an inductive approach. However, attempts to prove its correctness remain unsuccessful so far.
